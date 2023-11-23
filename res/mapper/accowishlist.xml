@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accowishlist">
+
+	<insert id="insertwish" parameterType="kr.or.ddit.accommodationwish.vo.AccoWishVO">
+		
+		insert into ACCOMMODATION_WISHLIST ( A_WISH_NO, MEM_ID, ACCO_NO )
+		values ( accowishno_seq.nextval, #{memId}, #{accoNo} ) 
+		
+	</insert>
+	
+	<select id="getwishlist" parameterType="kr.or.ddit.accommodationwish.vo.AccoWishVO" resultType="kr.or.ddit.accommodationwish.vo.AccoWishVO">
+		
+		select a.mem_id, a.a_wish_no, a.acco_no, b.acco_name, b.acco_info, b.acco_pri from ACCOMMODATION_WISHLIST a ,accommodation b 
+		where a.acco_no = b.acco_no and a.mem_id = #{memId}
+		
+	</select>
+
+</mapper>

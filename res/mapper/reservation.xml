@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reservation">
+
+	<!-- 숙소 예약 -->
+	<insert id="insertRes" parameterType="kr.or.ddit.reservation.vo.ResVO">
+
+		Insert into reservation
+		(res_no, mem_id, acco_no, res_start, res_end, res_people)
+		Values ( res_no_seq.nextval, #{memId}, #{accoNo}, #{resStart}, #{resEnd}, #{resPeople} )
+
+	</insert>
+	
+	<!-- 숙소 전체 조회 -->
+	<select id="getalllist" parameterType="kr.or.ddit.reservation.vo.ResVO">
+
+		Insert into reservation
+		(res_no, mem_id, acco_no, res_start, res_end, res_people)
+		Values ( res_no_seq.nextval, #{memId}, #{accoNo}, #{resStart}, #{resEnd}, #{resPeople} )
+
+	</select>
+	
+	<!-- 회원 내역 조회 -->
+	<select id="memreslist" parameterType="kr.or.ddit.reservation.vo.ResVO" resultType="kr.or.ddit.reservation.vo.ResVO">
+
+<!-- 		select a.res_no, a.mem_id, a.acco_no, b.acco_name, b.acco_loc, b.acco_pri, a.res_start, a.res_end, a.res_people, (a.res_end - a.res_start) * b.acco_pri AS total_price -->
+<!-- 		from reservation a, accommodation b where a.acco_no = b.acco_no and a.mem_id = #{memId} -->
+		
+<!-- 			select a.res_no, a.mem_id, a.acco_no, b.acco_name, b.acco_loc, b.acco_pri, a.res_start, a.res_end, a.res_people, (a.res_end - a.res_start) * b.acco_pri AS total_price, -->
+<!--     	(select count(*) from review c where c.res_no = a.res_no) as rev_cnt, -->
+<!--     	(select count(*) from review c where c.res_no = a.res_no and  a.res_end <![CDATA[<]]> sysdate) as rev_cnt2 -->
+<!-- 		from reservation a, accommodation b where a.acco_no = b.acco_no and a.mem_id =  #{memId} -->
+
+		select a.res_no, a.mem_id, a.acco_no, b.acco_name, b.acco_loc, b.acco_pri, a.res_start, a.res_end, a.res_people, (a.res_end - a.res_start) * b.acco_pri AS total_price,
+    	(select count(*) from review c where c.res_no = a.res_no) as rev_cnt,
+    	 (SELECT COUNT(*) FROM reservation c  WHERE c.res_no = a.res_no  AND a.res_end <![CDATA[<]]> SYSDATE  ) AS rev_cnt2        
+		from reservation a, accommodation b where a.acco_no = b.acco_no and a.mem_id =  #{memId}
+
+	</select>
+
+	
+	<select id="resaccolist" parameterType="String" resultType="kr.or.ddit.reservation.vo.ResVO">
+		select a.acco_no, a.res_no, a.mem_id, a.res_start, a.res_end, a.res_people, (a.res_end - a.res_start) * b.acco_pri AS total_price
+		from reservation a, accommodation b where a.acco_no = b.acco_no and a.acco_no = #{accoNo}
+	</select>
+	
+	<!-- 숙소 정렬 -->
+	<select id="ressoartlist" parameterType="kr.or.ddit.reservation.vo.ResVO" resultType="kr.or.ddit.reservation.vo.ResVO">
+<!-- 		SELECT DISTINCT d.acco_no, d.acco_name, d.acco_info, d.acco_img_no, e.acco_img_path -->
+<!-- 			FROM ( SELECT DISTINCT a.acco_no AS acco_no FROM accommodation a,  -->
+<!-- 				( SELECT acco_no FROM reservation WHERE #{resStart} <![CDATA[>=]]> res_start AND res_end <![CDATA[<=]]> #{resEnd} ) b  -->
+<!-- 					WHERE a.acco_no = b.acco_no AND a.acco_loc like '%' || #{accoLoc} || '%' ) c, accommodation d, acco_img e  -->
+<!-- 						WHERE c.acco_no != d.acco_no AND d.acco_loc like '%' || #{accoLoc} || '%' AND d.acco_max <![CDATA[>]]> #{resPeople} and d.acco_img_no = e.acco_img_no and e.ACCO_IMG_SN = '1' -->
+
+		SELECT DISTINCT d.acco_no, d.acco_name, d.acco_info, d.acco_img_no, e.acco_img_path 
+			FROM accommodation d
+				INNER JOIN acco_img e ON d.acco_img_no = e.acco_img_no
+					WHERE d.acco_no NOT IN 
+						( SELECT DISTINCT a.acco_no AS acco_no FROM accommodation a INNER JOIN reservation b ON a.acco_no = b.acco_no WHERE a.acco_loc like '%' || #{accoLoc} || '%' AND TO_DATE( #{resStartStr}, 'YYYY-MM-DD' ) <![CDATA[<=]]> res_start AND res_end <![CDATA[>=]]> TO_DATE( #{resEndStr}, 'YYYY-MM-DD' ) )
+		AND d.acco_loc like '%' || #{accoLoc} || '%'
+		AND d.acco_max <![CDATA[>=]]> #{resPeople}
+		AND e.acco_img_sn = '1'
+	</select>
+	
+	
+	
+</mapper>

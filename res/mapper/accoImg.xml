@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accoImg">
+ 
+<!-- ACCO_IMG_NO 숫자 0으로 고정되는문제 해결하기 위해... -->
+   <select id="getAccoImgNo" resultType="int">
+      select ACCO_IMG_SEQ.nextval from dual
+   </select>
+
+
+<!-- 숙소 등록 시 이미지 넣기 -->
+ <insert id="insert" parameterType="kr.or.ddit.accommodation.vo.AccoImgVO">
+      
+      insert into ACCO_IMG
+      (
+        ACCO_IMG_NO,
+        ACCO_IMG_PATH, 
+        ACCO_IMG_SN
+      )
+      values
+      (
+         #{accoImgNo},
+         #{accoImgPath},
+          (select nvl(max(acco_img_sn), 0)+1 
+          from acco_img
+          where acco_img_no = #{accoImgNo})
+      )   
+      
+   </insert>
+
+<!-- 숙소정보볼 때 이미지 불러오기 위해서 -->
+   <select id="getImgList" parameterType="int" resultType="kr.or.ddit.accommodation.vo.AccoImgVO">
+      select ACCO_IMG_SN, ACCO_IMG_PATH from ACCO_IMG
+         where ACCO_IMG_NO = #{accoImgNo}
+   </select>
+
+<!--    <select id="getImgList1" parameterType="int" resultType="kr.or.ddit.accommodation.vo.AccoImgVO"> -->
+<!--       select ACCO_IMG_SN, ACCO_IMG_PATH from ACCO_IMG -->
+<!--          where ACCO_IMG_NO = #{accoImgNo} and ACCO_IMG_SN = '1' -->
+<!--    </select> -->
+
+
+<!-- 숙소 업데이트 시?? -->
+   <update id="updateImg" parameterType="kr.or.ddit.accommodation.vo.AccoImgVO">
+   update acco_img
+   set ACCO_IMG_SN =#{accoImgSn},
+   ACCO_IMG_PATH =#{accoImgPath}
+   where ACCO_IMG_NO = #{accoImgNo}
+   </update>
+
+</mapper>

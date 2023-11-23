@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="blacklist">
+
+ 	<insert id="insertBlacklist" parameterType="kr.or.ddit.blacklist.vo.BlacklistVO">
+	    
+	    insert into BLACKLIST
+		(BLK_NO, MEM_ID, MEM_ID2, BLK_CONTENT, BLK_DATE, BLK_DAYS, BLK_YN)
+		values (BLK_NO_SEQ.nextVal, #{memId}, #{memId2}, #{blkContent}, sysdate, '7', 'Y')
+ 	
+ 	</insert>	
+ 	
+ 	<update id="updateBlacklist" parameterType="kr.or.ddit.blacklist.vo.BlacklistVO">
+ 	
+		UPDATE BLACKLIST
+		SET BLK_CONTENT= #{blkContent},
+			BLK_DAYS= #{blkDays}
+		WHERE BLK_NO= #{blkNo}
+ 	
+ 	</update>
+ 	
+ 	<delete id="deleteBlacklist" parameterType="String">
+ 	
+ 		delete from BLACKLIST where BLK_NO = #{blkNo}
+ 	
+ 	</delete>
+ 	
+ 	<resultMap type="kr.or.ddit.blacklist.vo.BlacklistVO" id="blacklistMap">
+ 		<result column="BLK_NO" property="blkNo" />
+ 		<result column="MEM_ID" property="memId" />
+ 		<result column="MEM_ID2" property="memId2" />
+ 		<result column="BLK_CONTENT" property="blkContent" />
+ 		<result column="BLK_DATE" property="blkDate" />
+ 		<result column="BLK_DAYS" property="blkDays" />
+ 		<result column="BLK_YN" property="blkYn" />
+ 	</resultMap>
+ 	
+ 	<select id="getAllBlacklist" resultMap="blacklistMap" >
+ 	
+ 		select *
+ 		from BLACKLIST
+ 	
+ 	</select>
+ 	
+  	<select id="getBlacklist" parameterType="String" resultType="kr.or.ddit.blacklist.vo.BlacklistVO">
+ 	
+ 		select BLK_NO blkNo,
+ 				MEM_ID memId,
+ 				MEM_ID2 memId2,
+ 				BLK_CONTENT blkContent,
+ 				BLK_DATE blkDate,
+ 				BLK_DAYS blkDays,
+ 				BLK_YN blkYn
+ 		from BLACKLIST
+ 		where BLK_NO = #{blkNo}
+ 	
+ 	</select>
+ 	
+ 	<select id="searchBlacklist" parameterType="kr.or.ddit.blacklist.vo.BlacklistVO" resultType="kr.or.ddit.blacklist.vo.BlacklistVO">
+ 	
+ 		select BLK_NO blkNo,
+ 				MEM_ID memId,
+ 				MEM_ID2 memId2,
+ 				BLK_CONTENT blkContent,
+ 				BLK_DATE blkDate, ,
+ 				BLK_DAYS blkDays,
+ 				BLK_YN blkYn
+ 		from BLACKLIST
+ 		where 1=1
+ 		<if test='blkNo != null and blkNo != ""'>
+ 			and BLK_NO = #{blkNo}
+ 		</if>
+ 		<if test='memId != null and memId != ""'>
+ 			and MEM_ID like '%' || #{memId} || '%'
+ 		</if>
+ 		<if test='memId2 != null and memId2 != ""'>
+ 			and MEM_ID2 like '%' || #{memId2} || '%'
+ 		</if>
+ 		<if test='blkContent != null and blkContent != ""'>
+ 			and BLK_CONTENT like '%' || #{blkContent} || '%'
+ 		</if>
+ 		<if test='blkDate != null and blkDate != ""'>
+ 			and BLK_DATE like '%' || #{blkDate} || '%' 
+ 		</if>
+ 		<if test='blkDays != null and blkDays != ""'>
+ 			and BLK_DAYS like '%' || #{blkDays} || '%' 
+ 		</if>
+ 		<if test='blkYn != null and blkYn != ""'>
+ 			and BLK_YN like '%' || #{blkYn} || '%' 
+ 		</if>
+ 	
+ 	</select>
+ 	
+ 	<select id="searchBlacklist2" parameterType="Map" resultType="kr.or.ddit.blacklist.vo.BlacklistVO">
+ 	
+ 		select BLK_NO blkNo,
+ 				MEM_ID memId,
+ 				MEM_ID2 memId2,
+ 				BLK_CONTENT blkContent,
+ 				BLK_DATE blkDate, ,
+ 				BLK_DAYS blkDays,
+ 				BLK_YN blkYn
+ 		from BLACKLIST
+ 		where 1=1
+ 		<if test='blkNo != null and blkNo != ""'>
+ 			and BLK_NO = #{blkNo}
+ 		</if>
+ 		<if test='memId != null and memId != ""'>
+ 			and MEM_ID like '%' || #{memId} || '%'
+ 		</if>
+ 		<if test='memId2 != null and memId2 != ""'>
+ 			and MEM_ID2 like '%' || #{memId2} || '%'
+ 		</if>
+ 		<if test='blkContent != null and blkContent != ""'>
+ 			and BLK_CONTENT like '%' || #{blkContent} || '%'
+ 		</if>
+ 		<if test='blkDate != null and blkDate != ""'>
+ 			and BLK_DATE like '%' || #{blkDate} || '%' 
+ 		</if>
+ 		<if test='blkDays != null and blkDays != ""'>
+ 			and BLK_DAYS like '%' || #{blkDays} || '%' 
+ 		</if>
+ 		<if test='blkYn != null and blkYn != ""'>
+ 			and BLK_YN like '%' || #{blkYn} || '%' 
+ 		</if>
+ 	
+ 	</select>
+ 	
+ 	<select id="checkBlacklist" parameterType="String" resultType="int">
+ 	
+ 		select count(*) as cnt
+ 		from BLACKLIST
+ 		where BLK_NO = #{blkNo}
+ 	
+ 	</select>
+ 	
+ 
+</mapper>

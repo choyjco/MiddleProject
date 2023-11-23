@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardNot">
+ 
+ 	<insert id="insertBoardNot" parameterType="kr.or.ddit.board.vo.BoardNotVO">
+	    
+	    insert into NOTICE
+		(NOT_NO, MEM_ID, NOT_TITLE, NOT_CONTENT, NOT_DATE)
+		values (BOARD_NOT_SEQ.nextVal, #{memId}, #{notTitle}, #{notContent}, sysdate)
+ 	
+ 	</insert>	
+ 	
+ 	<update id="updateBoardNot" parameterType="kr.or.ddit.board.vo.BoardNotVO">
+ 	
+		UPDATE NOTICE
+		SET NOT_TITLE= #{notTitle},
+			NOT_CONTENT= #{notContent}
+		WHERE NOT_NO= #{notNo}
+ 	
+ 	</update>
+ 	
+ 	<delete id="deleteBoardNot" parameterType="String">
+ 	
+ 		delete from NOTICE where NOT_NO = #{notNo}
+ 	
+ 	</delete>
+ 	
+ 	<resultMap type="kr.or.ddit.board.vo.BoardNotVO" id="boardNotMap">
+ 		<result column="NOT_NO" property="notNo" />
+ 		<result column="MEM_ID" property="memId" />
+ 		<result column="NOT_TITLE" property="notTitle" />
+ 		<result column="NOT_CONTENT" property="notContent" />
+ 		<result column="NOT_DATE" property="notDate" />
+ 	</resultMap>
+ 	
+ 	<select id="getAllBoardNot" resultMap="boardNotMap" >
+ 	
+ 		select *
+ 		from NOTICE
+ 		order by NOT_NO desc
+ 	
+ 	</select>
+ 	
+  	<select id="getBoardNot" parameterType="String" resultType="kr.or.ddit.board.vo.BoardNotVO">
+ 	
+ 		select NOT_NO notNo,
+ 				MEM_ID memId,
+ 				NOT_TITLE notTitle,
+ 				NOT_CONTENT notContent,
+ 				NOT_DATE notDate
+ 		from NOTICE
+ 		where NOT_NO = #{notNo}
+ 	
+ 	</select>
+ 	
+ 	<select id="searchBoardNot" parameterType="kr.or.ddit.board.vo.BoardNotVO" resultType="kr.or.ddit.board.vo.BoardNotVO">
+ 	
+ 		select NOT_NO notNo,
+ 				MEM_ID memId,
+ 				NOT_TITLE notTitle,
+ 				NOT_CONTENT notContent,
+ 				NOT_DATE notDate
+ 		from NOTICE
+ 		where 1=1
+ 		<if test='notNo != null and notNo != ""'>
+ 			and NOT_NO = #{notNo}
+ 		</if>
+ 		<if test='memId != null and memId != ""'>
+ 			and MEM_ID like '%' || #{memId} || '%'
+ 		</if>
+ 		<if test='notTitle != null and notTitle != ""'>
+ 			and NOT_TITLE like '%' || #{notTitle} || '%'
+ 		</if>
+ 		<if test='notContent != null and notContent != ""'>
+ 			and NOT_CONTENT like '%' || #{notContent} || '%' 
+ 		</if>
+ 	
+ 	</select>
+ 	
+ 	<select id="searchBoardNot2" parameterType="Map" resultType="kr.or.ddit.board.vo.BoardNotVO">
+ 	
+ 		select NOT_NO notNo,
+ 				MEM_ID memId,
+ 				NOT_TITLE notTitle,
+ 				NOT_CONTENT notContent,
+ 				NOT_DATE notDate
+ 		from NOTICE
+ 		where 1=1
+ 		<if test='notNo != null and notNo != ""'>
+ 			and NOT_NO = #{notNo}
+ 		</if>
+ 		<if test='memId != null and memId != ""'>
+ 			and MEM_ID like '%' || #{memId} || '%'
+ 		</if>
+ 		<if test='notTitle != null and notTitle != ""'>
+ 			and NOT_TITLE like '%' || #{notTitle} || '%'
+ 		</if>
+ 		<if test='notContent != null and notContent != ""'>
+ 			and NOT_CONTENT like '%' || #{notContent} || '%' 
+ 		</if>
+ 	
+ 	</select>
+ 	
+ 	<select id="checkBoardNot" parameterType="String" resultType="int">
+ 	
+ 		select count(*) as cnt
+ 		from NOTICE
+ 		where NOT_NO = #{notNo}
+ 	
+ 	</select>
+ 	
+ 
+</mapper>

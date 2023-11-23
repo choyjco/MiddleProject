@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- fullcalendar css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+    <!-- fullcalendar 언어 설정관련 script -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth', // 초기 로드 될때 보이는 캘린더 화면(기본 설정: 달)
+                headerToolbar: { // 헤더에 표시할 툴 바
+                    // start: 'prev next today',
+                    start: 'prev today',
+                    center: 'title',
+                    // end: 'dayGridMonth,dayGridWeek,dayGridDay'
+                    end: 'next'
+                },
+                titleFormat: function (date) {
+                    return date.date.year + '년 ' + (parseInt(date.date.month) + 1) + '월';
+                },
+
+                // 선택 범위 날짜 가져오기
+                //initialDate: '2021-07-15', // 초기 날짜 설정 (설정하지 않으면 오늘 날짜가 보인다.)
+                selectable: true, // 달력 일자 드래그 설정가능
+                droppable: true,
+                editable: true,
+                nowIndicator: true, // 현재 시간 마크
+                locale: 'ko', // 한국어 설정
+
+                select: function (info) {
+                    var startDate = info.start; // 선택된 범위의 시작 날짜
+                    var endDate = info.end; // 선택된 범위의 종료 날짜
+
+                    // 원하는 형식으로 날짜 포맷을 변경
+                    var formattedStartDate = startDate.toLocaleDateString('ko-KR').replace(/\./g, '');
+                    var formattedEndDate = endDate.toLocaleDateString('ko-KR').replace(/\./g, '');
+
+                    // 시작 날짜와 종료 날짜를 출력
+                    console.log('시작 날짜: ' + formattedStartDate);
+                    console.log('종료 날짜: ' + formattedEndDate);
+
+                    calendar.unselect();
+                }
+            });
+            calendar.render();
+        });
+    </script>
+
+</head>
+
+<body>
+
+    <div id='calendar'></div>
+
+
+</body>
+
+</html>

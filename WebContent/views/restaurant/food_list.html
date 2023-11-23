@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .thumbnail {
+            width: 250px;
+            height: 180px;
+            position: relative;
+        }
+
+        .thumbnail:hover::before {
+            content: attr(data-intro);
+            position: absolute;
+            top: 0;
+            left: 100%;
+            background-color: white;
+            padding: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        div.aa {
+            float: left;
+            width: 110px;
+            margin: 10px;
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        table {
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+
+        td {
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .introduction {
+            overflow: visible;
+            white-space: normal;
+            text-overflow: clip;
+        }
+
+        div {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            /* 가운데 정렬 */
+        }
+
+        .search-container {
+            margin-bottom: 30px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            padding: 10px 20px;
+            z-index: 1;
+        }
+
+        .result-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="지역, 식당 또는 음식을 입력">
+        <button id="search-button">검색</button>
+        <select id="id_sel">
+            <option value="0">--선택--</option>
+            <option value="a">가나다순</option>
+            <option value="b">최신순</option>
+        </select>
+    </div>
+
+    <div class="result-container" id="result-container"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        //제이쿼리 방식 AJAX작성
+        var items = [];
+        $.ajax({
+            url: 'http://api.visitjeju.net/vsjApi/contents/searchList?' +
+                'apiKey=c6ow35z3wt3rmwwa' +
+                '&locale=kr' +
+                '&category=c4',
+            success: function (rst) {
+                console.log(rst);
+
+                $.each(rst.items, function (index, item) {
+                    let introduction = (item.introduction.length + item.title.length) > 15 ? item.introduction.slice(0, 15 - item.title.length) + '...' : item.introduction;
+
+                    var table = $("<table border='1'></table>");
+                    var img = $("<img class='thumbnail' src='" + item.repPhoto.photoid.imgpath + "' alt='사진'>");
+                    var title = $("<span class='title'>[" + item.title + "] </span>");
+                    var intro = $("<span class='introduction'>" + introduction + "</span>");
+
+                    table.append($("<tr></tr>").append($("<td></td>").append(img)));
+                    table.append($("<tr></tr>").append($("<td></td>").append(title).append(intro)));
+
+                    items.push({
+                        table: table,
+                        title: item.title.toLowerCase(),
+                        introduction: item.introduction.toLowerCase()
+                    });
+                });
+
+                printItems(items);
+            },
+            error: function (xhr) {
+                alert(xhr.status);
+            }
+        });
+
+        $('#search-button').click(function () {
+            var keyword = $('#search-input').val().toLowerCase();
+            var filteredItems = items.filter(function (item) {
+                return item.title.includes(keyword) || item.introduction.includes(keyword);
+            });
+            printItems(filteredItems);
+        });
+
+        $('#id_sel').change(function () {
+            var value = $(this).val();
+            if (value === 'a') {
+                // 가나다 순으로 정렬
+                items.sort(function (a, b) {
+                    var titleA = a.title;
+                    var titleB = b.title;
+                    return titleA.localeCompare(titleB);
+                });
+                printItems(items);
+            }
+        });
+        
+        $('#id_sel').change(function () {
+            var value = $(this).val();
+            if (value === 'b') {
+                // 가나다 순으로 정렬
+                items.sort(function (a, b) {
+                    var titleA = a.title;
+                    var titleB = b.title;
+                    return titleA.localeCompare(titleB);
+                });
+                printItems(items);
+            }
+        });
+
+        function printItems(items) {
+            $('#result-container').empty();
+            items.forEach(function (item) {
+                $('#result-container').append(item.table);
+            });
+        }
+    </script>
+</body>
+
+</html>

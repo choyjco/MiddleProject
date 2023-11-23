@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="activity">
+
+
+	<resultMap type="kr.or.ddit.activity.vo.ActivityVO"
+		id="memMap">
+		<result property="actNo" column="ACT_NO" />
+		<result property="actName" column="ACT_NAME" />
+		<result property="actLoc" column="ACT_LOC" />
+		<result property="actTel" column="ACT_TEL" />
+		<result property="actIntro" column="ACT_INTRO" />
+		<result property="actCate" column="ACT_CATE" />
+		<result property="actLat" column="ACT_LAT" />
+		<result property="actLong" column="ACT_LONG" />
+
+		<association property="activityImgVO"
+			resultMap="activityImgMap"></association>
+	</resultMap>
+
+	<resultMap type="kr.or.ddit.activity.vo.ActivityImgVO"
+		id="activityImgMap">
+		<result property="actNo" column="ACT_NO" />
+		<result property="actImgNo" column="ACT_IMG_NO" />
+		<result property="actImgPath" column="ACT_IMG_PATH" />
+	</resultMap>
+
+	<select id="displayAllActivity" resultMap="memMap">
+		select A.ACT_NO, A.ACT_NAME, A.ACT_LOC, A.ACT_TEL, A.ACT_INTRO, A.ACT_CATE,
+		A.ACT_LAT, A.ACT_LONG
+		, B.ACT_IMG_NO, B.ACT_NO, B.ACT_IMG_PATH
+		from
+		ACTIVITY A, ACT_IMG B
+		WHERE A.ACT_NO = B.ACT_NO
+		ORDER BY A.ACT_IMG_PATH
+	</select>
+
+	<select id="arrayActivity" resultMap="memMap">
+		select A.ACT_NO, A.ACT_NAME, A.ACT_LOC, A.ACT_TEL, A.ACT_INTRO, A.ACT_CATE,
+		A.ACT_LAT, A.ACT_LONG
+		, B.ACT_IMG_NO, B.ACT_NO, B.ACT_IMG_PATH
+		from
+		ACTIVITY A, ACT_IMG B
+		WHERE A.ACT_NO = B.ACT_NO
+		ORDER BY A.ACT_NAME
+	</select>
+	
+	<select id="newActivity" resultMap="memMap">
+		select A.ACT_NO, A.ACT_NAME, A.ACT_LOC, A.ACT_TEL, A.ACT_INTRO, A.ACT_CATE,
+		A.ACT_LAT, A.ACT_LONG
+		, B.ACT_IMG_NO, B.ACT_NO, B.ACT_IMG_PATH
+		from
+		ACTIVITY A, ACT_IMG B
+		WHERE A.ACT_NO = B.ACT_NO
+		ORDER BY A.ACT_NO
+	</select>
+	
+
+	<select id="searchActivity" parameterType="HashMap" resultMap="memMap">
+
+		select A.ACT_NO, A.ACT_NAME, A.ACT_LOC, A.ACT_TEL, A.ACT_INTRO, A.ACT_CATE,
+		A.ACT_LAT, A.ACT_LONG
+		, B.ACT_IMG_NO, B.ACT_NO, B.ACT_IMG_PATH
+		from
+		ACTIVITY A, ACT_IMG B
+		WHERE A.ACT_NO = B.ACT_NO
+
+		<if test='actName != null and actName != ""'>
+			and act_name like '%'|| #{actName} ||'%'
+		</if>
+		<if test='actLoc != null and actLoc != ""'>
+			and act_loc like '%'|| #{actLoc} ||'%'
+		</if>
+		<if test='actCate != null and actCate != ""'>
+			and act_cate like '%'|| #{actCate} ||'%'
+		</if>
+		<if test='actIntro != null and actIntro != ""'>
+			and act_intro like '%'|| #{actIntro} ||'%'
+		</if>
+		<if test='actTel != null and actTel != ""'>
+			and act_tel like '%'|| #{actTel} ||'%'
+		</if>
+		
+
+	</select>
+	
+	<!-- 놀거리 게시물  -->
+	
+	<insert id="insertActivity" parameterType="kr.or.ddit.activity.vo.ActivityVO">
+	  insert all
+            into activity(ACT_NO, ACT_NAME, ACT_LOC, ACT_TEL, ACT_INTRO, ACT_CATE) 
+            values ('CNTS_'||lpad(act_no_seq.nextval,11,'0'), #{actName}, #{actLoc}, #{actTel}, #{actIntro}, #{actCate})
+            into act_img(ACT_IMG_NO, ACT_NO, ACT_IMG_PATH) 
+            values (act_img_no_seq.nextval, 'CNTS_'||lpad(act_no_seq.nextval,11,'0'), #{activityImgVO.actImgPath})
+       select * from dual
+	</insert>
+	
+	<select id="listActivity" resultMap="memMap">
+		
+		select A.ACT_NO, A.ACT_NAME, A.ACT_LOC, A.ACT_TEL, A.ACT_INTRO, A.ACT_CATE,
+		A.ACT_LAT, A.ACT_LONG
+		, B.ACT_IMG_PATH
+		from
+		ACTIVITY A, ACT_IMG B
+		WHERE A.ACT_NO = B.ACT_NO
+		ORDER BY A.ACT_NAME
+
+	</select>
+	
+	<select id="detailActivity" parameterType="String" resultMap="memMap">   
+	   SELECT A.ACT_NO, A.ACT_NAME, A.ACT_LOC, A.ACT_TEL, A.ACT_INTRO, A.ACT_CATE,
+       B.ACT_IMG_NO, B.ACT_IMG_PATH
+       FROM ACTIVITY A, ACT_IMG B
+       WHERE A.ACT_NO = B.ACT_NO
+       AND A.ACT_NO = #{actNo}
+    </select> 
+    
+    <delete id="deleteActivity" parameterType="String">
+    	DELETE FROM activity
+    	WHERE ACT_NO IN (
+    	SELECT A.ACT_NO
+    	FROM activity A
+    	JOIN act_img B ON A.ACT_NO = B.ACT_NO
+    	WHERE A.ACT_NO = #{actNo})
+    </delete>
+    
+    <update id = "updateActivity" parameterType="kr.or.ddit.activity.vo.ActivityVO">
+      UPDATE activity 
+      SET act_name = #{actName},
+      act_loc = #{actLoc},
+      act_tel = #{actTel},
+      act_intro = #{actIntro},
+      act_cate = #{actCate}
+      WHERE ACT_NO = #{actNo}
+
+    </update>
+    
+    <update id = "updateImgActivity" parameterType="kr.or.ddit.activity.vo.ActivityVO">
+      UPDATE act_img 
+      SET act_img_path = #{activityImgVO.actImgPath}
+      WHERE ACT_NO = #{actNo}
+    </update>
+
+</mapper>  
+
+
+

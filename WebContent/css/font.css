@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap');
+
+.header a {
+    text-decoration: none;
+}
+
+
+.header .maintitle {
+    font-family: 'Kaushan Script', cursive;
+    font-size: 10rem;
+}

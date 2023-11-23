@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardAnswer">
+
+	<resultMap type="kr.or.ddit.board.vo.BoardAnswerVO" id="boardAnswerMap">
+ 		<result column="ASK_NO" property="askNo" />
+ 		<result column="MEM_ID" property="memId" />
+ 		<result column="ANS_CONTENT" property="ansContent" />
+ 		<result column="ANS_DATE" property="ansDate" />
+ 	</resultMap>
+ 	
+ 	<!-- 답변목록조회하기 -->
+ 	<select id="getAllBoardAnswer" resultMap="boardAnswerMap" >
+ 	
+ 		select *
+ 		from ANSWER
+ 	
+ 	</select>
+ 	
+ 	<!-- 답변조회하기 -->
+ 	<select id="getBoardAnswer" parameterType="String" resultType="kr.or.ddit.board.vo.BoardAnswerVO">
+ 	
+ 		select ASK_NO askNo,
+ 				MEM_ID memId,
+ 				ANS_CONTENT ansContent,
+ 				ANS_DATE ansDate
+ 		from ANSWER
+ 		where ASK_NO = #{askNo}
+ 	
+ 	</select>
+ 	
+ 	<!-- 해당문의 답변목록 -->
+ 	<select id="getAllBoardAskAns" resultMap="boardAnswerMap" >
+ 	
+ 		select *
+ 		from ANSWER
+ 		where TRIM(ASK_NO)= #{askNo}
+ 	
+ 	</select>
+ 	
+ 	<!-- 답변입력하기 -->
+ 	<insert id="insertBoardAnswer" parameterType="kr.or.ddit.board.vo.BoardAnswerVO">
+	    
+	    insert into ANSWER
+		(ASK_NO, MEM_ID, ANS_CONTENT, ANS_DATE)
+		values (#{askNo}, #{memId}, #{ansContent}, sysdate)
+ 	
+ 	</insert>
+ 	
+ 	<!-- 답변입력시 문의 답변여부에 Y로 -->
+ 	<update id="updateBoardAnswerY" parameterType="kr.or.ddit.board.vo.BoardAskVO">
+ 	
+		UPDATE ASK
+		SET ASK_ANS= 'Y'
+		WHERE ASK_NO = #{askNo}
+ 	
+ 	</update>
+ 	
+	 <!-- 답변삭제시 문의 답변여부에 N로 -->
+ 	<update id="updateBoardAnswerN" parameterType="kr.or.ddit.board.vo.BoardAskVO">
+ 	
+		UPDATE ASK
+		SET ASK_ANS= 'N'
+		WHERE ASK_NO = #{askNo}
+ 	
+ 	</update>
+ 	
+ 	<!-- 답변 수정하기 -->
+ 	<update id="updateBoardAnswer" parameterType="kr.or.ddit.board.vo.BoardAnswerVO">
+ 	
+		UPDATE ANSWER
+		SET ANS_CONTENT= #{ansContent}
+		WHERE ASK_NO= #{askNo}
+ 	
+ 	</update>
+ 	
+ 	<!-- 답변 삭제하기 -->
+ 	<delete id="deleteBoardAnswer" parameterType="String">
+ 	
+ 		delete from ANSWER where ASK_NO = #{askNo}
+ 	
+ 	</delete>
+
+</mapper>

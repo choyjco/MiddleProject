@@ -1,0 +1,27 @@
+div {
+    border: solid 1px gold;
+    box-sizing: border-box;  /* 스크롤 없애기 */
+}
+#wrapper {
+    /* vh(view height) - 보여지는 화면 크기에 맞는 상대적 크기를 반환하는 단위 */
+    height: 100vh;
+}
+#header {
+    height: 15%; 
+}
+#middle {
+    height: 75%;
+}
+#side {
+    width: 30%;
+}
+#main {
+    width: 70%;
+}
+#side, #main {
+    height: 100%;
+    float: left;
+}
+#footer {
+    height: 10%;
+}

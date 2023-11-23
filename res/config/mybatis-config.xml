@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<properties resource="db.properties" />
+	
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<setting name="jdbcTypeForNull" value="NULL" /> <!-- oracle 부적합한 열유형 null처리 -->
+		
+	</settings>
+	
+	<environments default="dev">
+		<environment id="dev">
+			<transactionManager type="JDBC" />
+			<!-- MyBatis 자체 커넥션풀을 사용한다. -->
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+				<!-- 활성화된 최대 커넥션 수 -->
+				<property name="poolMaximumActiveConnections" value="2" />
+				<!-- 유휴상태에서 최대 커넥션 수 -->
+				<property name="poolMaximumIdleConnections" value="2" />
+			</dataSource>
+		</environment>
+
+	</environments>
+
+	<mappers>
+		<mapper resource="mapper/reservation.xml" />
+		<mapper resource="mapper/member.xml" />
+		<mapper resource="mapper/accoImg.xml" />
+		<mapper resource="mapper/accommodation.xml" />
+		<mapper resource="mapper/boardFaq.xml" />
+		<mapper resource="mapper/boardNot.xml" />
+		<mapper resource="mapper/restaurant.xml" />
+		<mapper resource="mapper/activity.xml" />
+		<mapper resource="mapper/blacklist.xml" />
+		<mapper resource="mapper/boardAnswer.xml" />
+
+		<mapper resource="mapper/boardAsk.xml" />
+		<mapper resource="mapper/reservation.xml" />
+		<mapper resource="mapper/member.xml" />
+		<mapper resource="mapper/accoImg.xml" />
+		<mapper resource="mapper/accommodation.xml" />
+		<mapper resource="mapper/boardFaq.xml" />
+<!-- 		<mapper resource="mapper/boardNot.xml" /> -->
+		<mapper resource="mapper/restaurant.xml" />
+		<mapper resource="mapper/activity.xml" />
+		<!-- <mapper resource="mapper/restaurant.xml" /> -->
+		<mapper resource="mapper/review.xml" />
+		<mapper resource="mapper/accowishlist.xml" />
+	</mappers>
+
+</configuration>

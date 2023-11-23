@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardAsk">
+	<!-- bav : BoardAskVO [askNo=null, memId=A001, askTitle=문의게시판 테스트, askContent=문의게시판 테스트입니다..~~!!!!!, askDate=null, askAns=null] -->
+ 	<insert id="insertBoardAsk" parameterType="kr.or.ddit.board.vo.BoardAskVO">
+	    
+	    insert into ASK
+		(ASK_NO, MEM_ID, ASK_TITLE, ASK_CONTENT, ASK_DATE, ASK_ANS)
+		values (BOARD_ASK_SEQ.nextVal, #{memId}, #{askTitle}, #{askContent}, sysdate, 'N')
+ 	
+ 	</insert>	
+ 	
+ 	<update id="updateBoardAsk" parameterType="kr.or.ddit.board.vo.BoardAskVO">
+ 	
+		UPDATE ASK
+		SET ASK_TITLE= #{askTitle},
+			ASK_CONTENT= #{askContent}
+		WHERE ASK_NO= #{askNo}
+ 	
+ 	</update>
+ 	
+ 	<delete id="deleteBoardAsk" parameterType="String">
+ 	
+ 		delete from ASK where ASK_NO = #{askNo}
+ 	
+ 	</delete>
+ 	
+ 	<resultMap type="kr.or.ddit.board.vo.BoardAskVO" id="boardAskMap">
+ 		<result column="ASK_NO" property="askNo" />
+ 		<result column="MEM_ID" property="memId" />
+ 		<result column="ASK_TITLE" property="askTitle" />
+ 		<result column="ASK_CONTENT" property="askContent" />
+ 		<result column="ASK_DATE" property="askDate" />
+ 		<result column="ASK_ANS" property="askAns" />
+ 	</resultMap>
+ 	
+ 	<select id="getAllBoardAsk" resultMap="boardAskMap" >
+ 	
+ 		select *
+ 		from ASK
+ 		order by ASK_NO desc
+ 	
+ 	</select>
+ 	
+  	<select id="getBoardAsk" parameterType="String" resultType="kr.or.ddit.board.vo.BoardAskVO">
+ 	
+ 		select ASK_NO askNo,
+ 				MEM_ID memId,
+ 				ASK_TITLE askTitle,
+ 				ASK_CONTENT askContent,
+ 				ASK_DATE askDate,
+ 				ASK_ANS askAns
+ 		from ASK
+ 		where ASK_NO = #{askNo}
+ 	
+ 	</select>
+ 	
+ 	<select id="searchBoardAsk" parameterType="kr.or.ddit.board.vo.BoardAskVO" resultType="kr.or.ddit.board.vo.BoardAskVO">
+ 	
+ 		select ASK_NO askNo,
+ 				MEM_ID memId,
+ 				ASK_TITLE askTitle,
+ 				ASK_CONTENT askContent,
+ 				ASK_DATE askDate,
+ 				ASK_ANS askAns
+ 		from ASK
+ 		where 1=1
+ 		<if test='askNo != null and askNo != ""'>
+ 			and ASK_NO = #{askNo}
+ 		</if>
+ 		<if test='memId != null and memId != ""'>
+ 			and MEM_ID like '%' || #{memId} || '%'
+ 		</if>
+ 		<if test='askTitle != null and askTitle != ""'>
+ 			and ASK_TITLE like '%' || #{askTitle} || '%'
+ 		</if>
+ 		<if test='askContent != null and askContent != ""'>
+ 			and ASK_CONTENT like '%' || #{askContent} || '%' 
+ 		</if>
+ 	
+ 	</select>
+ 	
+ 	<select id="searchBoardAsk2" parameterType="Map" resultType="kr.or.ddit.board.vo.BoardAskVO">
+ 	
+ 		select ASK_NO askNo,
+ 				MEM_ID memId,
+ 				ASK_TITLE askTitle,
+ 				ASK_CONTENT askContent,
+ 				ASK_DATE askDate,
+ 				ASK_ANS askAns
+ 		from ASK
+ 		where 1=1
+ 		<if test='askNo != null and askNo != ""'>
+ 			and ASK_NO = #{askNo}
+ 		</if>
+ 		<if test='memId != null and memId != ""'>
+ 			and MEM_ID like '%' || #{memId} || '%'
+ 		</if>
+ 		<if test='askTitle != null and askTitle != ""'>
+ 			and ASK_TITLE like '%' || #{askTitle} || '%'
+ 		</if>
+ 		<if test='askContent != null and askContent != ""'>
+ 			and ASK_CONTENT like '%' || #{askContent} || '%' 
+ 		</if>
+ 	
+ 	</select>
+ 	
+ 	<select id="checkBoardAsk" parameterType="String" resultType="int">
+ 	
+ 		select count(*) as cnt
+ 		from ASK
+ 		where ASK_NO = #{askNo}
+ 	
+ 	</select>
+ 	
+ 
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardFaq">
+
+ 	<insert id="insertBoardFaq" parameterType="kr.or.ddit.board.vo.BoardFaqVO">
+	    
+	    insert into FAQ
+		(FAQ_NO, MEM_ID, FAQ_TITLE, FAQ_CONTENT, FAQ_DATE)
+		values (BOARD_FAQ_SEQ.nextVal, #{memId}, #{faqTitle}, #{faqContent}, sysdate)
+ 	
+ 	</insert>	
+ 	
+ 	<update id="updateBoardFaq" parameterType="kr.or.ddit.board.vo.BoardFaqVO">
+ 	
+		UPDATE FAQ
+		SET FAQ_TITLE= #{faqTitle},
+			FAQ_CONTENT= #{faqContent}
+		WHERE FAQ_NO= #{faqNo}
+ 	
+ 	</update>
+ 	
+ 	<delete id="deleteBoardFaq" parameterType="String">
+ 	
+ 		delete from FAQ where FAQ_NO = #{faqNo}
+ 	
+ 	</delete>
+ 	
+ 	<resultMap type="kr.or.ddit.board.vo.BoardFaqVO" id="boardFaqMap">
+ 		<result column="FAQ_NO" property="faqNo" />
+ 		<result column="MEM_ID" property="memId" />
+ 		<result column="FAQ_TITLE" property="faqTitle" />
+ 		<result column="FAQ_CONTENT" property="faqContent" />
+ 		<result column="FAQ_DATE" property="faqDate" />
+ 	</resultMap>
+ 	
+ 	<select id="getAllBoardFaq" resultMap="boardFaqMap" >
+ 	
+ 		select *
+ 		from FAQ
+ 		order by FAQ_NO desc
+ 	
+ 	</select>
+ 	
+  	<select id="getBoardFaq" parameterType="String" resultType="kr.or.ddit.board.vo.BoardFaqVO">
+ 	
+ 		select FAQ_NO faqNo,
+ 				MEM_ID memId,
+ 				FAQ_TITLE faqTitle,
+ 				FAQ_CONTENT faqContent,
+ 				FAQ_DATE faqDate
+ 		from FAQ
+ 		where FAQ_NO = #{faqNo}
+ 	
+ 	</select>
+ 	
+ 	<select id="searchBoardFaq" parameterType="kr.or.ddit.board.vo.BoardFaqVO" resultType="kr.or.ddit.board.vo.BoardFaqVO">
+ 	
+ 		select FAQ_NO faqNo,
+ 				MEM_ID memId,
+ 				FAQ_TITLE faqTitle,
+ 				FAQ_CONTENT faqContent,
+ 				FAQ_DATE faqDate
+ 		from FAQ
+ 		where 1=1
+ 		<if test='faqNo != null and faqNo != ""'>
+ 			and FAQ_NO = #{faqNo}
+ 		</if>
+ 		<if test='memId != null and memId != ""'>
+ 			and MEM_ID like '%' || #{memId} || '%'
+ 		</if>
+ 		<if test='faqTitle != null and faqTitle != ""'>
+ 			and FAQ_TITLE like '%' || #{faqTitle} || '%'
+ 		</if>
+ 		<if test='faqContent != null and faqContent != ""'>
+ 			and FAQ_CONTENT like '%' || #{faqContent} || '%' 
+ 		</if>
+ 	
+ 	</select>
+ 	
+ 	<select id="searchBoardFaq2" parameterType="Map" resultType="kr.or.ddit.board.vo.BoardFaqVO">
+ 	
+ 		select FAQ_NO faqNo,
+ 				MEM_ID memId,
+ 				FAQ_TITLE faqTitle,
+ 				FAQ_CONTENT faqContent,
+ 				FAQ_DATE faqDate
+ 		from FAQ
+ 		where 1=1
+ 		<if test='faqNo != null and faqNo != ""'>
+ 			and FAQ_NO = #{faqNo}
+ 		</if>
+ 		<if test='memId != null and memId != ""'>
+ 			and MEM_ID like '%' || #{memId} || '%'
+ 		</if>
+ 		<if test='faqTitle != null and faqTitle != ""'>
+ 			and FAQ_TITLE like '%' || #{faqTitle} || '%'
+ 		</if>
+ 		<if test='faqContent != null and faqContent != ""'>
+ 			and FAQ_CONTENT like '%' || #{faqContent} || '%' 
+ 		</if>
+ 	
+ 	</select>
+ 	
+ 	<select id="checkBoardFaq" parameterType="String" resultType="int">
+ 	
+ 		select count(*) as cnt
+ 		from FAQ
+ 		where FAQ_NO = #{faqNo}
+ 	
+ 	</select>
+ 	
+ 
+</mapper>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../css/style1.css">
+
+    <script src="../js/login.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        $(document).ready(function () {
+            $('.nav-btn').click(function () {
+                // 선택된 버튼의 텍스트 가져오기
+                var buttonText = $(this).text().trim();
+
+                // 모든 탭 버튼에서 .active 클래스 제거
+                $('.nav-btn').removeClass('active');
+
+                // 클릭된 탭 버튼에만 .active 클래스 추가
+                $(this).addClass('active');
+
+                // 버튼의 텍스트에 따라 내용 변경
+                if (buttonText === '일반 회원') {
+                    $('.signinPopupBody').html(`
+                        <div class="loginFormSec signIn">
+                            <input name="userId" type="text" maxlength="50" placeholder="예) camstudy@gooroomee.com" class="inputField signIn" aria-required="true" aria-invalid="false">
+                            <label class="loginFormSecLabel">이메일 주소</label>
+                        </div>
+                        <div class="loginFormSec signIn">
+                            <input name="passWd" type="password" maxlength="16" placeholder="비밀번호" class="inputField signIn pwd">
+                            <label class="loginFormSecLabel">비밀번호</label>
+                        </div>
+                        <div class="login-option-wrapper">
+                            <div class="login-option saveId"><label><input type="checkbox" class="checkbox save-id"><span class="checkboxTx">아이디 저장</span></label></div>
+                            <div class="login-option findPwd"><a class="find-pwd">비밀번호 찾기</a></div>
+                        </div>
+                        <button class="login-btn">로그인</button>
+                    `);
+                } else if (buttonText === '학원 회원') {
+                    $('.signinPopupBody').html(`
+                        <div class="loginFormSec signIn">
+                            <input name="schoolId" type="text" maxlength="50" placeholder="학원 ID" class="inputField signIn" aria-required="true" aria-invalid="false">
+                            <label class="loginFormSecLabel">학원 ID</label>
+                        </div>
+                        <div class="loginFormSec signIn">
+                            <input name="userId" type="text" maxlength="50" placeholder="예) camstudy@gooroomee.com" class="inputField signIn" aria-required="true" aria-invalid="false">
+                            <label class="loginFormSecLabel">이메일 주소</label>
+                        </div>
+                        <div class="loginFormSec signIn">
+                            <input name="passWd" type="password" maxlength="16" placeholder="비밀번호" class="inputField signIn pwd">
+                            <label class="loginFormSecLabel">비밀번호</label>
+                        </div>
+                    `);
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="singinContent">
+        <header class="signinHeader">
+            <h1 class="signinLogo">
+                <a href="/camstudy/room" class="logo" title="구루미 로고"></a>
+            </h1>
+        </header>
+        <div class="login-form">
+            <div class="signinContentBody">
+                <div class="signinPopupLayer pageType">
+
+                    <!-- 로그인 헤더 부분 -->
+                    <h4 class="signinPopupHeaderTitle signIn">로그인</h4>
+
+                    <!-- 카테고리 영역 -->
+                    <ul class="signin-nav-list-wrap">
+                        <!-- 일반 회원 카테고리 -->
+                        <li class="nav-list"><button class="nav-btn active">일반 회원</button></li>
+                        
+                        <!-- 관리자 회원 카테고리 -->
+                        <li class="nav-list"><button class="nav-btn">학원 회원</button></li>
+
+                    </ul>
+                    
+                    <!-- 로그인 영역 바디 -->
+                    <div class="regLogin">
+                        <div class="signinPopupBody"><!---->
+
+                            <!-- 아이디 영역 -->
+                            <div class="loginFormSec signIn">
+                                <input name="userId" type="text" maxlength="50" placeholder="예) camstudy@gooroomee.com"
+                                    class="inputField signIn" aria-required="true" aria-invalid="false">
+                                <label class="loginFormSecLabel">이메일주소</label>
+                            </div>
+
+                            <!-- 비밀번호 영역 -->
+                            <div class="loginFormSec signIn">
+                                <input name="passWd" type="password" maxlength="16" placeholder="비밀번호"
+                                    class="inputField signIn pwd">
+                                <label class="loginFormSecLabel">비밀번호</label>
+                            </div>
+
+                            <!-- 버튼 영역(아이디&비밀번호) -->
+                            <div class="login-option-wrapper">
+                                <div class="login-option saveId"><label><input type="checkbox" class="checkbox save-id"><span class="checkboxTx">아이디 저장</span></label></div>
+                                <div class="login-option findPwd"><a class="find-pwd">비밀번호 찾기</a></div>
+                            </div>
+
+                            <!-- 로그인 버튼 -->
+                            <button class="login-btn">로그인</button>
+                        </div>
+                    </div>
+
+                    <!-- SNS 하이퍼링크 영역 -->
+                    <p class="social-login-title">SNS 계정으로 시작하기</p>
+                    <div class="snsLogin">
+                        <button class="signinSocialBtn google"></button>
+                        <button class="signinSocialBtn naver"></button>
+                    </div>
+
+                    <!-- 회원 가입 하이퍼링크 영역 -->
+                    <div class="joinRec">
+                        <p class="secTitle signup">아직 회원이 아니신가요?</p>
+                        <button class="secBtn" onclick="location.href='#'">지금 가입하고 <em>프리미엄 7일 이용권</em>받기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

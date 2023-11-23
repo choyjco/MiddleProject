@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap');
+@import url(//fonts.googleapis.com/earlyaccess/hanna.css);
+
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+.header a {
+    text-decoration: none;
+}
+
+
+.header .maintitle {
+    font-family: 'Kaushan Script', cursive;
+    font-size: 10rem;
+}
+
+#menubar-nav p {
+	font-family: 'GmarketSansMedium';
+	font-size: 2rem;
+}
+
+#top-acco, #top-restaurant, #top-activity {
+	font-family: 'GmarketSansMedium';
+	font-size: 2rem;	
+}
+
+#accotitle, #restauranttitle, #activitytitle {
+	font-family: 'GmarketSansMedium';
+	font-weight: bold;
+	font-size: 1.5rem;	
+}
+
+#accotext, #restauranttext, #activitytext {
+	font-family: 'GmarketSansMedium';
+	font-size: 0.9rem;
+	font-weight: bold;
+	color: black;	
+}

@@ -1,0 +1,20 @@
+.search .big_search {
+    color: red;
+}
+
+body {
+    font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
+}
+
+.search__button {
+    background-color: #E51D56;
+    background-image: url("./images/search.svg");
+    background-size: 40%;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: none;
+    border-radius: 50%;
+    margin-left: 15px;
+    width: 50px;
+    height: 50px;
+}

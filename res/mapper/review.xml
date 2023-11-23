@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="review">
+
+<insert id="insert" parameterType="kr.or.ddit.review.vo.ReviewVO">
+
+<selectKey resultType="String" order="BEFORE" keyProperty="revNo">
+	Select 'REV_'||to_char(SYSDATE,'YYMMDD')||to_char(ACCO_REVIEW_SEQ.NEXTVAL) FROM DUAL
+</selectKey>
+
+	insert into REVIEW (REV_NO, RES_NO, REV_CON, REV_STAR, MEM_ID, ACCO_NO)
+	values (#{revNo},#{resNo},#{revCon},#{revStar},#{memId},#{accoNo})
+
+</insert>
+
+<update id="update" parameterType="kr.or.ddit.review.vo.ReviewVO">
+	
+	update REVIEW
+	set REV_CON= #{revCon},
+		REV_STAR= #{revStar}
+	where REV_NO= #{revNo}
+	
+</update>
+
+<select id="select" parameterType="String" resultType="kr.or.ddit.review.vo.ReviewVO">
+	select REV_NO as revNo, 
+		   RES_NO as resNo, 
+		   REV_CON as revCon, 
+		   REV_STAR as revStar, 
+		   REV_DATE as revDate
+	from Review
+	where REV_NO= #{revNo}
+</select>
+
+<!--숙소번호별 리뷰조회 -->
+<select id="detail" parameterType="String" resultType="kr.or.ddit.review.vo.ReviewVO">
+
+	select rev_con, rev_star, rev_date, acco_no, mem_id
+	from review
+	where acco_no= #{accoNo}
+
+</select>
+
+
+<!--회원별 리뷰조회 -->
+<select id="memRevList" parameterType="String" resultType="kr.or.ddit.review.vo.ReviewVO">
+SELECT b.acco_name, b.acco_pri, c.res_start, c.res_end, a.rev_no, a.rev_star, a.rev_con, b.acco_no
+FROM review a, accommodation b, reservation c
+WHERE b.acco_no = c.acco_no AND a.res_no = c.res_no AND a.mem_id = #{memId}
+
+</select>
+
+
+<!-- 리뷰 삭제 -->
+<delete id="delete" parameterType="String">
+	delete from review
+	where rev_no= #{revNo}
+</delete>
+
+ </mapper>

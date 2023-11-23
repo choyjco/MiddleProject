@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="accommodation">
+
+<!-- 숙소등록 -->
+   <insert id="insert" parameterType="kr.or.ddit.accommodation.vo.AccommodationVO">
+   	
+   	
+   	<selectKey resultType="String" order="BEFORE" keyProperty="accoNo">
+        SELECT 'ACCO_'||to_char(ACCO_NO_SEQ.NEXTVAL) FROM DUAL
+    </selectKey>
+<!--    	<selectKey resultType="String" order="BEFORE" keyProperty="accoNo"> -->
+<!--    		SELECT NVL(MAX(TO_NUMBER(ACCO_NO)),0)+1 FROM ACCOMMODATION -->
+<!--    	</selectKey> -->
+   	
+   	
+   insert into ACCOMMODATION (ACCO_NO, ACCO_NAME, ACCO_LOC, ACCO_MAX, ACCO_PRI, ACCO_INFO, ACCO_CATE, ACCO_TYPE, ACCO_ROOM, ACCO_BED, ACCO_BATH, ACCO_OPT, ACCO_LOC2, ACCO_IMG_NO, ACCO_STATE, MEM_ID)
+   values(#{accoNo}, #{accoName}, #{accoLoc}, #{accoMax}, #{accoPri}, #{accoInfo}, #{accoCate}, #{accoType}, #{accoRoom}, #{accoBed}, #{accoBath}, #{accoOpt}, #{accoLoc2}, #{accoImgNo}, #{accoState}, #{memId})
+	</insert>
+	
+<!-- 숙소정보조회 -->
+	<select id="detail" parameterType="String" resultType="kr.or.ddit.accommodation.vo.AccommodationVO">
+	select 	ACCO_NO as accoNo,
+			ACCO_NAME as accoName,
+			ACCO_LOC as accoLoc,
+			ACCO_MAX as accoMax,
+			ACCO_PRI as accoPri,
+			ACCO_INFO as accoInfo,
+			ACCO_CATE as accoCate,
+			ACCO_TYPE as accoType,
+			ACCO_ROOM as accoRoom,
+			ACCO_BED as accoBed,
+			ACCO_BATH as accoBath,
+			ACCO_OPT as accoOpt,
+			ACCO_LOC2 as accoLoc2,
+			ACCO_IMG_NO as accoImgNo,
+			MEM_ID as memId
+	FROM ACCOMMODATION 
+	where Acco_no= #{accoNo}
+	</select>
+
+	<!-- 숙소정보조회22 -->
+	<select id="detailOne" parameterType="String" resultType="kr.or.ddit.accommodation.vo.AccommodationVO">
+	select 	ACCO_NO as accoNo,
+			ACCO_NAME as accoName,
+			ACCO_LOC as accoLoc,
+			ACCO_MAX as accoMax,
+			ACCO_PRI as accoPri,
+			ACCO_INFO as accoInfo,
+			ACCO_CATE as accoCate,
+			ACCO_TYPE as accoType,
+			ACCO_ROOM as accoRoom,
+			ACCO_BED as accoBed,
+			ACCO_BATH as accoBath,
+			ACCO_OPT as accoOpt,
+			ACCO_LOC2 as accoLoc2,
+			ACCO_IMG_NO as accoImgNo,
+			ACCO_STATE as accoState
+	FROM ACCOMMODATION 
+	where Acco_no= #{accoNo}
+	</select>
+	
+
+	<!-- 숙소 수정 -->
+		<update id="update" parameterType="kr.or.ddit.accommodation.vo.AccommodationVO">
+		update ACCOMMODATION
+		set ACCO_NAME = #{accoName},
+		ACCO_LOC = #{accoLoc},
+		ACCO_MAX = #{accoMax}, 
+		ACCO_PRI = #{accoPri},
+		ACCO_INFO = #{accoInfo},
+		ACCO_CATE = #{accoCate},
+		ACCO_TYPE = #{accoType},
+		ACCO_ROOM = #{accoRoom},
+		ACCO_BED = #{accoBed},
+		ACCO_BATH = #{accoBath},
+		ACCO_OPT = #{accoOpt},
+		ACCO_LOC2 = #{accoLoc2},
+		ACCO_IMG_NO = #{accoImgNo}
+		where acco_no = #{accoNo}
+		</update>
+
+	<!-- 숙소 상태변경 -->
+	<update id="statusChange" parameterType="kr.or.ddit.accommodation.vo.AccommodationVO">
+		update ACCOMMODATION
+	    set ACCO_STATE = #{accoState}
+	    where acco_no = #{accoNo}
+	</update>
+	
+		<!-- 숙소 메인화면에서 전체 리스트 조회 -->
+	
+	<resultMap type="kr.or.ddit.accommodation.vo.AccommodationVO" id="accoMap">
+		<result column="acco_no" property="accoNo" />
+		<result column="acco_name" property="accoName" />
+		<result column="acco_info" property="accoInfo" />
+		<result column="acco_img_path" property="accoImgpath" />
+	</resultMap>
+	
+	<select id="getAllacco" resultMap="accoMap">
+		select a.acco_no, a.acco_name, a.acco_info, b.acco_img_path from accommodation a, acco_img b
+			where a.acco_img_no = b.acco_img_no and b.ACCO_IMG_SN = '1'
+	</select>
+	
+	<select id="memAccoList" parameterType="String" resultType="kr.or.ddit.accommodation.vo.AccommodationVO" >
+		select 
+			ACCO_NO as accoNo,
+			ACCO_NAME as accoName,
+			ACCO_LOC as accoLoc,
+			ACCO_MAX as accoMax,
+			ACCO_PRI as accoPri,
+			ACCO_INFO as accoInfo,
+			ACCO_CATE as accoCate,
+			ACCO_TYPE as accoType,
+			ACCO_ROOM as accoRoom,
+			ACCO_BED as accoBed,
+			ACCO_BATH as accoBath,
+			ACCO_OPT as accoOpt,
+			ACCO_LOC2 as accoLoc2,
+			ACCO_STATE as accoState
+		 from ACCOMMODATION
+		 where mem_id = #{memId}
+		
+	</select>
+	
+</mapper>
